@@ -1,0 +1,204 @@
+#include<stdio.h> 
+#include<ctype.h> 
+#include<string.h> 
+#include<stdlib.h> 
+#define SIZE 128 
+#define NONE -1 
+#define EOS '\0' 
+#define NUM 257 
+#define KEYWORD 258 
+#define ID 259 
+#define DONE 260 
+#define MAX 999 
+charlexemes[MAX]; 
+charbuffer[SIZE]; 
+intlastchar=-1; 
+intlastentry=0; 
+inttokenval=DONE; 
+intlineno=1; 
+intlookahead; 
+structentry 
+{ 
+ char*lexptr; 
+ inttoken; 
+} 
+symtable[100]; 
+structentry 
+ keywords[]=  
+{"if",KEYWORD,"else",KEYWORD,"for",KEYWORD,"int",KEYWORD,"float",KEYWORD,  "double",KEYWORD,"char",KEYWORD,"struct",KEYWORD,"ret urn",KEYWORD,0,0 
+}; 
+voidError_Message(char*m) 
+{ 
+ fprintf(stderr,"line %d, %s \n",lineno,m); 
+ exit(1);
+} 
+intlook_up(chars[ ]) 
+{ 
+ intk; 
+ for(k=lastentry; k>0; k--) 
+ if(strcmp(symtable[k].lexptr,s)==0)  returnk; 
+ return0; 
+} 
+intinsert(chars[ ],inttok) 
+{ 
+ intlen; 
+ len=strlen(s); 
+ if(lastentry+1>=MAX) 
+ Error_Message("Symbpl table is full");  if(lastchar+len+1>=MAX) 
+ Error_Message("Lexemes array is full");  lastentry=lastentry+1; 
+ symtable[lastentry].token=tok; 
+ symtable[lastentry].lexptr=&lexemes[lastchar+1];  lastchar=lastchar+len+1; 
+ strcpy(symtable[lastentry].lexptr,s);  returnlastentry; 
+} 
+/*void Initialize() 
+{ 
+ struct entry *ptr; 
+ for(ptr=keywords;ptr->token;ptr+1) 
+ insert(ptr->lexptr,ptr->token); 
+}*/ 
+intlexer() 
+{ 
+ intt; 
+ intval,i=0; 
+ while(1) 
+ { 
+ t=getchar();
+if(t==' '||t=='\t'); 
+ elseif(t=='\n') 
+ lineno=lineno+1; 
+ elseif(isdigit(t)) 
+ { 
+ ungetc(t,stdin); 
+ scanf("%d",&tokenval); 
+ returnNUM; 
+ } 
+ elseif(isalpha(t)) 
+ { 
+ while(isalnum(t)) 
+ { 
+ buffer[i]=t; 
+ t=getchar(); 
+ i=i+1; 
+ if(i>=SIZE) 
+ Error_Message("Compiler error");  } 
+ buffer[i]=EOS; 
+ if(t!=EOF) 
+ ungetc(t,stdin); 
+ val=look_up(buffer); 
+ if(val==0) 
+ val=insert(buffer,ID); 
+ tokenval=val; 
+ returnsymtable[val].token; 
+ } 
+ elseif(t==EOF) 
+ returnDONE; 
+ else 
+ { 
+ tokenval=NONE; 
+ returnt; 
+ } 
+ } 
+}
+voidMatch(intt) 
+{ 
+ if(lookahead==t) 
+ lookahead=lexer(); 
+ else 
+ Error_Message("Syntax error"); 
+} 
+voiddisplay(intt,inttval) 
+{ 
+ if(t=='+'||t=='-'||t=='*'||t=='/') 
+ printf("\nArithmetic Operator: %c",t);  elseif(t==NUM) 
+ printf("\n Number: %d",tval); 
+ elseif(t==ID) 
+ printf("\n Identifier: %s",symtable[tval].lexptr);  else 
+ printf("\n Token %d tokenval %d",t,tokenval); } 
+voidF() 
+{ 
+ //void E(); 
+ switch(lookahead) 
+ { 
+ case'(': 
+ Match('('); 
+ E(); 
+ Match(')'); 
+ break; 
+ caseNUM : 
+ display(NUM,tokenval); 
+ Match(NUM); 
+ break; 
+ caseID : 
+ display(ID,tokenval); 
+ Match(ID); 
+ break; 
+ default:
+Error_Message("Syntax error"); 
+ } 
+} 
+voidT() 
+{ 
+ intt; 
+ F(); 
+ while(1) 
+ { 
+ switch(lookahead) 
+ { 
+ case'*': 
+ t=lookahead; 
+ Match(lookahead); 
+ F(); 
+ display(t,NONE); 
+ continue; 
+ case'/': 
+ t=lookahead; 
+ Match(lookahead); 
+ display(t,NONE); 
+ continue; 
+ default: 
+ return; 
+ } 
+ } 
+} 
+voidE() 
+{ 
+ intt; 
+ T(); 
+ while(1) 
+ { 
+ switch(lookahead) 
+ { 
+ case'+': 
+ t=lookahead;
+Match(lookahead); 
+ T(); 
+ display(t,NONE); 
+ continue; 
+ case'-': 
+ t=lookahead; 
+ Match(lookahead); 
+ T(); 
+ display(t,NONE); 
+ continue; 
+ default: 
+ return; 
+ } 
+ } 
+} 
+voidparser() 
+{ 
+ lookahead=lexer(); 
+ while(lookahead!=DONE) 
+ { 
+ E(); 
+ Match(';'); 
+ } 
+} 
+intmain() 
+{ 
+ charans[10]; 
+ printf("\n Program for recursive descent parsing ");  printf("\n Enter the expression "); 
+ printf("And place ; at the end\n"); 
+ printf("Press Ctrl-Z to terminate\n");  parser();<br>return0; 
+}
+
