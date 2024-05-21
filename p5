@@ -10,20 +10,20 @@
 #define ID 259 
 #define DONE 260 
 #define MAX 999 
-charlexemes[MAX]; 
-charbuffer[SIZE]; 
-intlastchar=-1; 
-intlastentry=0; 
-inttokenval=DONE; 
-intlineno=1; 
-intlookahead; 
-structentry 
+char lexemes[MAX]; 
+char buffer[SIZE]; 
+int lastchar=-1; 
+int lastentry=0; 
+int tokenval=DONE; 
+int lineno=1; 
+int lookahead; 
+struct entry 
 { 
  char*lexptr; 
  inttoken; 
 } 
 symtable[100]; 
-structentry 
+struct entry 
  keywords[]=  
 {"if",KEYWORD,"else",KEYWORD,"for",KEYWORD,"int",KEYWORD,"float",KEYWORD,  "double",KEYWORD,"char",KEYWORD,"struct",KEYWORD,"ret urn",KEYWORD,0,0 
 }; 
